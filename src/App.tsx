@@ -17,6 +17,7 @@ import { MesFormations } from './pages/MesFormations';
 import { AdminChantiers } from './pages/AdminChantiers';
 import { AdminChantierBuilder } from './pages/AdminChantierBuilder';
 import { AdminEquipe } from './pages/AdminEquipe';
+import { Parametres } from './pages/Parametres';
 import { WhatsAppFloat } from './components/ui/WhatsAppFloat';
 
 import { AuthProvider } from './contexts/AuthContext';
@@ -43,6 +44,7 @@ function App() {
             <Route path="/app/formations/:slug" element={<AppLayout><FormationViewer /></AppLayout>} />
             <Route path="/app/mes-formations" element={<AppLayout><MesFormations /></AppLayout>} />
             <Route path="/app/perspectives" element={<AppLayout><Perspectives /></AppLayout>} />
+            <Route path="/app/parametres" element={<AppLayout><Parametres /></AppLayout>} />
 
             {/* Routes Admin */}
             <Route path="/app/admin/formations" element={<AppLayout><AdminFormations /></AppLayout>} />
