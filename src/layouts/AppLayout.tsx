@@ -64,14 +64,9 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
             >
               <Menu size={24} />
             </button>
-            <div className="relative w-48 md:w-64 hidden sm:block">
-              <input type="text" placeholder="Rechercher..." className="w-full bg-background border border-border rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all" />
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <button className="w-10 h-10 rounded-full bg-primary/5 border border-primary/10 flex items-center justify-center text-primary hover:bg-primary/10 hover:border-primary/20 transition-colors shadow-sm">
-              <User size={20} />
-            </button>
+            <h2 className="text-lg font-semibold text-primary hidden md:block">
+              Espace de Travail
+            </h2>
           </div>
         </header>
 
