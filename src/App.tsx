@@ -17,6 +17,7 @@ import { MesFormations } from './pages/MesFormations';
 import { AdminChantiers } from './pages/AdminChantiers';
 import { AdminChantierBuilder } from './pages/AdminChantierBuilder';
 import { AdminEquipe } from './pages/AdminEquipe';
+import { WhatsAppFloat } from './components/ui/WhatsAppFloat';
 
 import { AuthProvider } from './contexts/AuthContext';
 
@@ -50,6 +51,7 @@ function App() {
             <Route path="/app/admin/chantiers/:id" element={<AppLayout><AdminChantierBuilder /></AppLayout>} />
             <Route path="/app/admin/equipe" element={<AppLayout><AdminEquipe /></AppLayout>} />
           </Routes>
+          <WhatsAppFloat />
       </Router>
     </AuthProvider>
   );
