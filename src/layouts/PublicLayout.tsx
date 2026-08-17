@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import type { ReactNode } from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { Menu, X, ChevronRight, Phone, Mail, MapPin } from 'lucide-react';
@@ -89,20 +89,20 @@ export const PublicLayout = ({ children }: { children: ReactNode }) => {
             </div>
 
             {/* Colonne 3 : Services */}
-            <div className="md:col-span-1">
-              <h3 className="text-accent font-semibold mb-6">Nos Domaines</h3>
-              <ul className="flex flex-col gap-4 text-sm text-gray-300">
+            <div className="space-y-4">
+              <h4 className="text-white font-semibold mb-6">Nos Domaines</h4>
+              <ul className="space-y-3 text-sm text-gray-300">
                 <li className="flex items-center gap-2"><ChevronRight size={14} /> Architecture & Design</li>
                 <li className="flex items-center gap-2"><ChevronRight size={14} /> Construction & BTP</li>
-                <li className="flex items-center gap-2"><ChevronRight size={14} /> Ã‰tudes & Métré</li>
+                <li className="flex items-center gap-2"><ChevronRight size={14} /> Études & Métré</li>
                 <li className="flex items-center gap-2"><ChevronRight size={14} /> Consulting d'Ingénierie</li>
               </ul>
             </div>
 
             {/* Colonne 4 : Contact */}
-            <div className="md:col-span-1">
-              <h3 className="text-accent font-semibold mb-6">Contactez-nous</h3>
-              <ul className="flex flex-col gap-4 text-sm text-gray-300">
+            <div className="space-y-4">
+              <h4 className="text-white font-semibold mb-6">Contactez-nous</h4>
+              <ul className="space-y-4 text-sm text-gray-300">
                 <li className="flex items-start gap-3">
                   <MapPin size={18} className="text-accent shrink-0 mt-0.5" />
                   <span>Cameroun<br/>Siège social</span>
@@ -120,9 +120,9 @@ export const PublicLayout = ({ children }: { children: ReactNode }) => {
             
           </div>
           
-          <div className="pt-8 border-t border-primary-light flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-500">
-            <p>&copy; {new Date().getFullYear()} RÃ‰VOLUTION GROUP. Tous droits réservés.</p>
-            <div className="flex gap-4">
+          <div className="border-t border-white/10 mt-16 pt-8 text-center text-sm text-gray-400">
+            <p>&copy; {new Date().getFullYear()} RÉVOLUTION GROUP. Tous droits réservés.</p>
+            <div className="flex justify-center gap-4 mt-2">
               <Link to="/app" className="hover:text-accent transition-colors">Portail Collaborateur</Link>
               <Link to="#" className="hover:text-accent transition-colors">Mentions Légales</Link>
             </div>
