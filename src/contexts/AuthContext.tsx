@@ -9,6 +9,7 @@ interface AuthContextType {
   isLoading: boolean;
   signOut: () => Promise<void>;
   isAdmin: boolean;
+  updateProfile: (updates: any) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -18,6 +19,7 @@ const AuthContext = createContext<AuthContextType>({
   isLoading: true,
   signOut: async () => {},
   isAdmin: false,
+  updateProfile: async () => {},
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -29,6 +31,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const fetchProfile = async (userId: string) => {
     const { data } = await supabase.from('profiles').select('*').eq('id', userId).single();
     setProfile(data);
+  };
+
+  const updateProfile = async (updates: any) => {
+    if (!user) return;
+    const { data, error } = await supabase
+      .from('profiles')
+      .update(updates)
+      .eq('id', user.id)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    if (data) setProfile(data);
   };
 
   useEffect(() => {
@@ -62,7 +77,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const isAdmin = profile?.role === 'admin' || profile?.role === 'equipe';
 
   return (
-    <AuthContext.Provider value={{ user, session, profile, isLoading, signOut, isAdmin }}>
+    <AuthContext.Provider value={{ user, session, profile, isLoading, signOut, isAdmin, updateProfile }}>
       {children}
     </AuthContext.Provider>
   );
