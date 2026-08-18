@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { FileSignature, Calculator, HardHat, CheckCircle2 } from 'lucide-react';
+import { FileSignature, Calculator, HardHat, CheckCircle2, FileText, UploadCloud } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
@@ -237,11 +237,21 @@ export const Devis = () => {
                 accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
               />
               {files.length > 0 ? (
-                <div className="text-accent font-medium">
-                  {files.length} fichier(s) sélectionné(s)
+                <div className="flex flex-col gap-2 relative z-10 pointer-events-none text-left">
+                  <p className="text-sm font-semibold text-text-main mb-2">Documents sélectionnés ({files.length}) :</p>
+                  {files.map((file, idx) => (
+                    <div key={idx} className="flex items-center gap-3 bg-background border border-border p-3 rounded-lg">
+                      <FileText size={20} className="text-accent flex-shrink-0" />
+                      <span className="text-sm font-medium text-primary-text truncate">{file.name}</span>
+                    </div>
+                  ))}
+                  <p className="text-xs text-text-muted mt-2 text-center">Cliquez à nouveau pour modifier la sélection</p>
                 </div>
               ) : (
-                <p className="text-text-muted text-sm">Cliquez ici ou glissez-déposez vos fichiers (PDF, JPG, PNG)</p>
+                <div className="flex flex-col items-center justify-center gap-3">
+                  <UploadCloud size={32} className="text-text-muted" />
+                  <p className="text-text-muted text-sm">Cliquez ici ou glissez-déposez vos fichiers (PDF, JPG, PNG)</p>
+                </div>
               )}
             </div>
           </div>
