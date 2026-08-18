@@ -3,9 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, User } from 'lucide-react';
 
 const contacts = [
-  { name: 'Support Principal', number: '237670865004', role: 'Direction' },
-  { name: 'Assistance Technique', number: '237658444377', role: 'Ingénierie' },
-  { name: 'Service Client', number: '237674207515', role: 'Commercial' },
+  { name: 'Support Technique', number: '237670865004', role: 'Ingénieur & Fondateur' },
+  { name: 'Support Technique', number: '237658444377', role: 'Ingénieur & Fondateur' },
+  { name: 'Support Technique', number: '237674207515', role: 'Ingénieur & Fondateur' },
 ];
 
 export const WhatsAppFloat = () => {
