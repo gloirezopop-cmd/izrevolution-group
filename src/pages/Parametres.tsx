@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 import { Button } from '../components/ui/Button';
 import { User, Mail, Shield, Bell, Moon, LogOut } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 export const Parametres = () => {
   const { user, profile, isAdmin } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const [loading, setLoading] = useState(false);
 
   const handleLogout = async () => {
@@ -58,32 +60,40 @@ export const Parametres = () => {
           </div>
 
           <div className="bg-card border border-border p-6 rounded-2xl shadow-sm">
-            <h2 className="text-xl font-bold text-primary mb-6 border-b border-border pb-4">Préférences</h2>
+            <h2 className="text-xl font-bold text-primary-text mb-6 border-b border-border pb-4">Préférences</h2>
             
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-background rounded-lg border border-border">
+              <div className="flex items-center justify-between p-4 bg-background rounded-lg border border-border opacity-50 cursor-not-allowed">
                 <div className="flex items-center gap-3">
                   <Bell size={20} className="text-accent" />
                   <div>
-                    <h4 className="font-semibold text-primary text-sm">Notifications par email</h4>
+                    <h4 className="font-semibold text-primary-text text-sm">Notifications par email</h4>
                     <p className="text-xs text-text-muted">Recevoir des mises à jour sur mes devis et formations.</p>
                   </div>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" className="sr-only peer" defaultChecked />
+                  <input type="checkbox" className="sr-only peer" defaultChecked disabled />
                   <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
                 </label>
               </div>
 
-              <div className="flex items-center justify-between p-4 bg-background rounded-lg border border-border opacity-50 cursor-not-allowed">
+              <div className="flex items-center justify-between p-4 bg-background rounded-lg border border-border">
                 <div className="flex items-center gap-3">
-                  <Moon size={20} className="text-text-muted" />
+                  <Moon size={20} className="text-primary-text" />
                   <div>
-                    <h4 className="font-semibold text-primary text-sm">Mode Sombre (Bientôt)</h4>
+                    <h4 className="font-semibold text-primary-text text-sm">Mode Sombre</h4>
                     <p className="text-xs text-text-muted">Thème d'affichage de l'interface.</p>
                   </div>
                 </div>
-                <div className="text-xs font-semibold bg-gray-200 px-2 py-1 rounded">Bêta</div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input 
+                    type="checkbox" 
+                    className="sr-only peer" 
+                    checked={theme === 'dark'}
+                    onChange={toggleTheme}
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
+                </label>
               </div>
             </div>
           </div>

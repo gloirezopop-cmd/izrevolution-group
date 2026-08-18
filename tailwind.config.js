@@ -4,19 +4,21 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        background: '#F8F9FA',
-        card: '#FFFFFF',
+        background: 'rgba(var(--bg-background), <alpha-value>)',
+        card: 'rgba(var(--bg-card), <alpha-value>)',
         text: {
-          main: '#1F2937',
-          muted: '#6B7280',
+          main: 'rgba(var(--text-main), <alpha-value>)',
+          muted: 'rgba(var(--text-muted), <alpha-value>)',
         },
-        border: '#E5E7EB',
+        border: 'rgba(var(--border), <alpha-value>)',
         primary: {
           DEFAULT: '#0F172A', // Dark Blue
           light: '#1E293B',
+          text: 'rgba(var(--primary-text), <alpha-value>)',
         },
         accent: {
           DEFAULT: '#D4AF37', // Gold

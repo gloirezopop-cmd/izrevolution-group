@@ -5,6 +5,24 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --bg-background: 248, 249, 250; /* #F8F9FA */
+    --bg-card: 255, 255, 255; /* #FFFFFF */
+    --text-main: 31, 41, 55; /* #1F2937 */
+    --text-muted: 107, 114, 128; /* #6B7280 */
+    --border: 229, 231, 235; /* #E5E7EB */
+    --primary-text: 15, 23, 42; /* #0F172A */
+  }
+
+  .dark {
+    --bg-background: 15, 23, 42; /* #0F172A */
+    --bg-card: 30, 41, 59; /* #1E293B */
+    --text-main: 248, 250, 252; /* #F8FAFC */
+    --text-muted: 148, 163, 184; /* #94A3B8 */
+    --border: 51, 65, 85; /* #334155 */
+    --primary-text: 248, 250, 252; /* #F8FAFC */
+  }
+
   body {
     @apply bg-background text-text-main font-sans antialiased;
     /* Grain SVG filter inline as background */

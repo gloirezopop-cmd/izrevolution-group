@@ -21,11 +21,13 @@ import { Parametres } from './pages/Parametres';
 import { WhatsAppFloat } from './components/ui/WhatsAppFloat';
 
 import { AuthProvider } from './contexts/AuthContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
+    <ThemeProvider>
+      <AuthProvider>
+        <Router>
           <Routes>
             {/* Routes Publiques */}
             <Route path="/" element={<PublicLayout><Home /></PublicLayout>} />
@@ -55,7 +57,8 @@ function App() {
           </Routes>
           <WhatsAppFloat />
       </Router>
-    </AuthProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 
