@@ -3,16 +3,80 @@ import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { FileSignature, Calculator, HardHat, CheckCircle2 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { supabase } from '../lib/supabase';
+import { useAuth } from '../contexts/AuthContext';
 
 export const Devis = () => {
+  const { user } = useAuth();
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  
+  const [formData, setFormData] = useState({
+    nom_client: '',
+    telephone: '',
+    email: '',
+    localisation: '',
+    type_projet: '',
+    description: ''
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [files, setFiles] = useState<File[]>([]);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setFiles(Array.from(e.target.files));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulation d'envoi API
-    setTimeout(() => {
+    setIsSubmitting(true);
+    setSubmitError(null);
+    
+    try {
+      let pieces_jointes: string[] = [];
+
+      // Optional: upload files to devis bucket if policies exist
+      if (files.length > 0) {
+        for (const file of files) {
+          const fileExt = file.name.split('.').pop();
+          const fileName = `${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
+          const filePath = `${fileName}`;
+
+          const { error: uploadError, data } = await supabase.storage
+            .from('devis')
+            .upload(filePath, file);
+
+          if (!uploadError && data) {
+            pieces_jointes.push(data.path);
+          }
+        }
+      }
+
+      const { error } = await supabase
+        .from('devis')
+        .insert({
+          client_id: user?.id || null,
+          nom_client: formData.nom_client,
+          telephone: formData.telephone,
+          email: formData.email,
+          localisation: formData.localisation,
+          type_projet: formData.type_projet,
+          description: formData.description,
+          pieces_jointes: pieces_jointes,
+          statut: 'nouveau'
+        });
+
+      if (error) throw error;
+      
       setIsSubmitted(true);
-    }, 1000);
+    } catch (error: any) {
+      console.error('Erreur lors de la soumission du devis:', error);
+      setSubmitError('Une erreur est survenue lors de l\'envoi de votre demande. Veuillez réessayer ou nous contacter sur WhatsApp.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (isSubmitted) {
@@ -77,32 +141,70 @@ export const Devis = () => {
       <Card className="p-8 md:p-12 shadow-xl border-border/50">
         <h2 className="text-2xl font-bold mb-8 border-b border-border pb-4">Demander un Devis</h2>
         
+        {submitError && (
+          <div className="bg-red-50 text-red-600 p-4 rounded-lg mb-6 text-sm border border-red-200">
+            {submitError}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="flex flex-col gap-2">
               <label className="text-sm font-semibold text-text-main">Nom Complet / Entreprise *</label>
-              <input type="text" required className="px-4 py-3 rounded-xl border border-border bg-background focus:outline-none focus:border-primary transition-colors" placeholder="Ex: Jean Dupont" />
+              <input 
+                type="text" 
+                required 
+                value={formData.nom_client}
+                onChange={e => setFormData({...formData, nom_client: e.target.value})}
+                className="px-4 py-3 rounded-xl border border-border bg-background focus:outline-none focus:border-primary transition-colors" 
+                placeholder="Ex: Jean Dupont" 
+              />
             </div>
             <div className="flex flex-col gap-2">
               <label className="text-sm font-semibold text-text-main">Téléphone (WhatsApp de préférence) *</label>
-              <input type="tel" required className="px-4 py-3 rounded-xl border border-border bg-background focus:outline-none focus:border-primary transition-colors" placeholder="Ex: +237 600 00 00 00" />
+              <input 
+                type="tel" 
+                required 
+                value={formData.telephone}
+                onChange={e => setFormData({...formData, telephone: e.target.value})}
+                className="px-4 py-3 rounded-xl border border-border bg-background focus:outline-none focus:border-primary transition-colors" 
+                placeholder="Ex: +237 600 00 00 00" 
+              />
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="flex flex-col gap-2">
               <label className="text-sm font-semibold text-text-main">Adresse E-mail</label>
-              <input type="email" className="px-4 py-3 rounded-xl border border-border bg-background focus:outline-none focus:border-primary transition-colors" placeholder="Ex: contact@email.com" />
+              <input 
+                type="email" 
+                value={formData.email}
+                onChange={e => setFormData({...formData, email: e.target.value})}
+                className="px-4 py-3 rounded-xl border border-border bg-background focus:outline-none focus:border-primary transition-colors" 
+                placeholder="Ex: contact@email.com" 
+              />
             </div>
             <div className="flex flex-col gap-2">
               <label className="text-sm font-semibold text-text-main">Localisation du projet *</label>
-              <input type="text" required className="px-4 py-3 rounded-xl border border-border bg-background focus:outline-none focus:border-primary transition-colors" placeholder="Ex: Douala, Bonamoussadi" />
+              <input 
+                type="text" 
+                required 
+                value={formData.localisation}
+                onChange={e => setFormData({...formData, localisation: e.target.value})}
+                className="px-4 py-3 rounded-xl border border-border bg-background focus:outline-none focus:border-primary transition-colors" 
+                placeholder="Ex: Douala, Bonamoussadi" 
+              />
             </div>
           </div>
 
           <div className="flex flex-col gap-2">
             <label className="text-sm font-semibold text-text-main">Type de prestation souhaitée *</label>
-            <select required className="px-4 py-3 rounded-xl border border-border bg-background focus:outline-none focus:border-primary transition-colors">
+            <select 
+              required 
+              value={formData.type_projet}
+              onChange={e => setFormData({...formData, type_projet: e.target.value})}
+              className="px-4 py-3 rounded-xl border border-border bg-background focus:outline-none focus:border-primary transition-colors"
+            >
               <option value="">Sélectionnez un service...</option>
               <option value="metre">Étude et Métré uniquement (Devis quantitatif et estimatif)</option>
               <option value="construction">Construction clé en main</option>
@@ -114,19 +216,39 @@ export const Devis = () => {
 
           <div className="flex flex-col gap-2">
             <label className="text-sm font-semibold text-text-main">Description détaillée du projet *</label>
-            <textarea required rows={5} className="px-4 py-3 rounded-xl border border-border bg-background focus:outline-none focus:border-primary transition-colors resize-none" placeholder="Décrivez votre besoin (ex: Construction d'un immeuble R+3 à usage d'habitation avec parking...)"></textarea>
+            <textarea 
+              required 
+              rows={5} 
+              value={formData.description}
+              onChange={e => setFormData({...formData, description: e.target.value})}
+              className="px-4 py-3 rounded-xl border border-border bg-background focus:outline-none focus:border-primary transition-colors resize-none" 
+              placeholder="Décrivez votre besoin (ex: Construction d'un immeuble R+3 à usage d'habitation avec parking...)"
+            ></textarea>
           </div>
 
           <div className="flex flex-col gap-2">
             <label className="text-sm font-semibold text-text-main">Joindre des plans ou documents (Optionnel)</label>
-            <div className="border-2 border-dashed border-border rounded-xl p-8 text-center bg-background/50 hover:bg-background cursor-pointer transition-colors">
-              <p className="text-text-muted text-sm">Cliquez ici ou glissez-déposez vos fichiers (PDF, JPG, PNG)</p>
+            <div className="border-2 border-dashed border-border rounded-xl p-8 text-center bg-background/50 hover:bg-background cursor-pointer transition-colors relative">
+              <input 
+                type="file" 
+                multiple 
+                onChange={handleFileChange}
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+              />
+              {files.length > 0 ? (
+                <div className="text-accent font-medium">
+                  {files.length} fichier(s) sélectionné(s)
+                </div>
+              ) : (
+                <p className="text-text-muted text-sm">Cliquez ici ou glissez-déposez vos fichiers (PDF, JPG, PNG)</p>
+              )}
             </div>
           </div>
 
           <div className="mt-4">
-            <Button type="submit" variant="primary" className="w-full md:w-auto px-8 py-4 text-lg">
-              ENVOYER LA DEMANDE
+            <Button type="submit" variant="primary" disabled={isSubmitting} className="w-full md:w-auto px-8 py-4 text-lg">
+              {isSubmitting ? 'ENVOI EN COURS...' : 'ENVOYER LA DEMANDE'}
             </Button>
             <p className="text-xs text-text-muted mt-4 text-center md:text-left">
               * Champs obligatoires. En soumettant ce formulaire, vous acceptez d'être recontacté par RÉVOLUTION GROUP.
