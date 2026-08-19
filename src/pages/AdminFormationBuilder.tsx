@@ -210,7 +210,7 @@ export const AdminFormationBuilder = () => {
           <ArrowLeft size={20} />
         </button>
         <div>
-          <h1 className="text-3xl font-bold text-white mb-1">{isNew ? 'Créer une formation' : 'Éditer la formation'}</h1>
+          <h1 className="text-3xl font-bold text-text-main mb-1">{isNew ? 'Créer une formation' : 'Éditer la formation'}</h1>
           <p className="text-text-muted">Configurez les informations principales de la formation.</p>
         </div>
       </div>
@@ -223,7 +223,7 @@ export const AdminFormationBuilder = () => {
               type="text" 
               value={formation.titre}
               onChange={(e) => setFormation({...formation, titre: e.target.value})}
-              className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-accent"
+              className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-text-main focus:outline-none focus:border-accent"
               placeholder="Ex: Maîtrise de AutoCAD"
             />
           </div>
@@ -234,7 +234,7 @@ export const AdminFormationBuilder = () => {
               type="text" 
               value={formation.categorie}
               onChange={(e) => setFormation({...formation, categorie: e.target.value})}
-              className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-accent"
+              className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-text-main focus:outline-none focus:border-accent"
               placeholder="Ex: AutoCAD"
             />
           </div>
@@ -245,7 +245,7 @@ export const AdminFormationBuilder = () => {
               type="number" 
               value={formation.prix}
               onChange={(e) => setFormation({...formation, prix: parseInt(e.target.value)})}
-              className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-accent"
+              className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-text-main focus:outline-none focus:border-accent"
             />
           </div>
 
@@ -255,7 +255,7 @@ export const AdminFormationBuilder = () => {
               type="number" 
               value={formation.duree_h}
               onChange={(e) => setFormation({...formation, duree_h: parseInt(e.target.value)})}
-              className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-accent"
+              className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-text-main focus:outline-none focus:border-accent"
             />
           </div>
 
@@ -264,7 +264,7 @@ export const AdminFormationBuilder = () => {
             <select 
               value={formation.mode}
               onChange={(e) => setFormation({...formation, mode: e.target.value})}
-              className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-accent"
+              className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-text-main focus:outline-none focus:border-accent"
             >
               <option value="en_ligne">En ligne (E-learning)</option>
               <option value="presentiel">Présentiel</option>
@@ -277,7 +277,7 @@ export const AdminFormationBuilder = () => {
             <select 
               value={formation.niveau}
               onChange={(e) => setFormation({...formation, niveau: e.target.value})}
-              className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-accent"
+              className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-text-main focus:outline-none focus:border-accent"
             >
               <option value="debutant">Débutant</option>
               <option value="intermediaire">Intermédiaire</option>
@@ -291,7 +291,7 @@ export const AdminFormationBuilder = () => {
               type="url" 
               value={formation.lien_paiement || ''}
               onChange={(e) => setFormation({...formation, lien_paiement: e.target.value})}
-              className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-accent"
+              className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-text-main focus:outline-none focus:border-accent"
               placeholder="https://pay.stripe.com/..."
             />
             <p className="text-xs text-text-muted mt-1">Laissez vide pour utiliser le bouton WhatsApp standard.</p>
@@ -303,7 +303,7 @@ export const AdminFormationBuilder = () => {
               type="text" 
               value={formation.message_urgence || ''}
               onChange={(e) => setFormation({...formation, message_urgence: e.target.value})}
-              className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-accent"
+              className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-text-main focus:outline-none focus:border-accent"
               placeholder="Ex: Plus que 3 places disponibles !"
             />
           </div>
@@ -337,7 +337,7 @@ export const AdminFormationBuilder = () => {
             )}
             <div className="flex-1 text-sm text-text-muted">
               <p>Format recommandé : 16:9 (ex: 800x450 pixels).</p>
-              <p>Poids maximum : 2 Mo.</p>
+              <p>Poids maximum : 10 Mo.</p>
               <p className="mt-2 text-xs">Cette image sera affichée sur la carte de la formation dans le catalogue.</p>
             </div>
           </div>
@@ -349,7 +349,7 @@ export const AdminFormationBuilder = () => {
             value={formation.description}
             onChange={(e) => setFormation({...formation, description: e.target.value})}
             rows={4}
-            className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-accent resize-none"
+            className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-text-main focus:outline-none focus:border-accent resize-none"
             placeholder="Décrivez le contenu de la formation..."
           />
         </div>
@@ -364,7 +364,7 @@ export const AdminFormationBuilder = () => {
       {!isNew && (
         <div className="mt-8 bg-surface border border-border rounded-xl p-6">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold text-white">Programme de la formation</h2>
+            <h2 className="text-xl font-bold text-text-main">Programme de la formation</h2>
             <Button onClick={addModule} variant="outline" className="flex items-center gap-2 py-1.5 px-3 text-sm">
               <Plus size={16} /> Ajouter un module
             </Button>
@@ -380,7 +380,7 @@ export const AdminFormationBuilder = () => {
                     type="text" 
                     value={m.titre}
                     onChange={(e) => updateModuleTitle(m.id, e.target.value)}
-                    className="flex-1 bg-transparent border-none text-white font-bold focus:outline-none focus:ring-1 focus:ring-accent rounded px-2 py-1"
+                    className="flex-1 bg-transparent border-none text-text-main font-bold focus:outline-none focus:ring-1 focus:ring-accent rounded px-2 py-1"
                   />
                   <button onClick={() => deleteModule(m.id)} className="p-2 text-text-muted hover:text-red-500 transition-colors">
                     <Trash2 size={18} />
@@ -397,7 +397,7 @@ export const AdminFormationBuilder = () => {
                         type="text" 
                         value={l.titre}
                         onChange={(e) => updateLeconTitle(m.id, l.id, e.target.value)}
-                        className="flex-1 bg-transparent border-none text-sm text-white focus:outline-none focus:ring-1 focus:ring-accent rounded px-2 py-1"
+                        className="flex-1 bg-transparent border-none text-sm text-text-main focus:outline-none focus:ring-1 focus:ring-accent rounded px-2 py-1"
                       />
                       
                       {uploadingLecon === l.id ? (

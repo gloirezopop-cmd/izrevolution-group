@@ -143,7 +143,7 @@ export const AdminChantierBuilder = () => {
             <ArrowLeft size={20} />
           </button>
           <div>
-            <h1 className="text-3xl font-bold text-white mb-1">{isNew ? 'Créer un projet' : 'Éditer le projet'}</h1>
+            <h1 className="text-3xl font-bold text-text-main mb-1">{isNew ? 'Créer un projet' : 'Éditer le projet'}</h1>
             <p className="text-text-muted">Configurez les détails du chantier et ses photos.</p>
           </div>
         </div>
@@ -156,7 +156,7 @@ export const AdminChantierBuilder = () => {
         {/* Colonne Principale : Informations */}
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-surface border border-border rounded-xl p-6 space-y-6">
-            <h2 className="text-xl font-bold text-white border-b border-border pb-2">Informations Générales</h2>
+            <h2 className="text-xl font-bold text-text-main border-b border-border pb-2">Informations Générales</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
@@ -165,7 +165,7 @@ export const AdminChantierBuilder = () => {
                   type="text" 
                   value={chantier.titre}
                   onChange={(e) => setChantier({...chantier, titre: e.target.value})}
-                  className="w-full bg-background border border-border rounded-lg px-4 py-2 text-white focus:outline-none focus:border-accent"
+                  className="w-full bg-background border border-border rounded-lg px-4 py-2 text-text-main focus:outline-none focus:border-accent"
                 />
               </div>
               
@@ -174,7 +174,7 @@ export const AdminChantierBuilder = () => {
                 <select 
                   value={chantier.categorie}
                   onChange={(e) => setChantier({...chantier, categorie: e.target.value})}
-                  className="w-full bg-background border border-border rounded-lg px-4 py-2 text-white focus:outline-none focus:border-accent"
+                  className="w-full bg-background border border-border rounded-lg px-4 py-2 text-text-main focus:outline-none focus:border-accent"
                 >
                   <option value="btp">BTP</option>
                   <option value="architecture">Architecture</option>
@@ -188,7 +188,7 @@ export const AdminChantierBuilder = () => {
                   type="text" 
                   value={chantier.localisation}
                   onChange={(e) => setChantier({...chantier, localisation: e.target.value})}
-                  className="w-full bg-background border border-border rounded-lg px-4 py-2 text-white focus:outline-none focus:border-accent"
+                  className="w-full bg-background border border-border rounded-lg px-4 py-2 text-text-main focus:outline-none focus:border-accent"
                 />
               </div>
 
@@ -198,7 +198,7 @@ export const AdminChantierBuilder = () => {
                   type="number" 
                   value={chantier.annee}
                   onChange={(e) => setChantier({...chantier, annee: parseInt(e.target.value)})}
-                  className="w-full bg-background border border-border rounded-lg px-4 py-2 text-white focus:outline-none focus:border-accent"
+                  className="w-full bg-background border border-border rounded-lg px-4 py-2 text-text-main focus:outline-none focus:border-accent"
                 />
               </div>
             </div>
@@ -209,13 +209,13 @@ export const AdminChantierBuilder = () => {
                 value={chantier.description}
                 onChange={(e) => setChantier({...chantier, description: e.target.value})}
                 rows={4}
-                className="w-full bg-background border border-border rounded-lg px-4 py-2 text-white focus:outline-none focus:border-accent resize-none"
+                className="w-full bg-background border border-border rounded-lg px-4 py-2 text-text-main focus:outline-none focus:border-accent resize-none"
               />
             </div>
           </div>
 
           <div className="bg-surface border border-border rounded-xl p-6 space-y-6">
-            <h2 className="text-xl font-bold text-white border-b border-border pb-2">Planification & Avancement</h2>
+            <h2 className="text-xl font-bold text-text-main border-b border-border pb-2">Planification & Avancement</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
@@ -223,7 +223,7 @@ export const AdminChantierBuilder = () => {
                 <select 
                   value={chantier.statut}
                   onChange={(e) => setChantier({...chantier, statut: e.target.value})}
-                  className="w-full bg-background border border-border rounded-lg px-4 py-2 text-white focus:outline-none focus:border-accent"
+                  className="w-full bg-background border border-border rounded-lg px-4 py-2 text-text-main focus:outline-none focus:border-accent"
                 >
                   <option value="en_cours">En cours</option>
                   <option value="livre">Livré</option>
@@ -238,7 +238,7 @@ export const AdminChantierBuilder = () => {
                   min="0" max="100"
                   value={chantier.progression}
                   onChange={(e) => setChantier({...chantier, progression: parseInt(e.target.value)})}
-                  className="w-full bg-background border border-border rounded-lg px-4 py-2 text-white focus:outline-none focus:border-accent"
+                  className="w-full bg-background border border-border rounded-lg px-4 py-2 text-text-main focus:outline-none focus:border-accent"
                 />
               </div>
 
@@ -248,7 +248,7 @@ export const AdminChantierBuilder = () => {
                   type="date" 
                   value={chantier.date_debut || ''}
                   onChange={(e) => setChantier({...chantier, date_debut: e.target.value})}
-                  className="w-full bg-background border border-border rounded-lg px-4 py-2 text-white focus:outline-none focus:border-accent"
+                  className="w-full bg-background border border-border rounded-lg px-4 py-2 text-text-main focus:outline-none focus:border-accent"
                 />
               </div>
 
@@ -258,7 +258,7 @@ export const AdminChantierBuilder = () => {
                   type="date" 
                   value={chantier.date_fin || ''}
                   onChange={(e) => setChantier({...chantier, date_fin: e.target.value})}
-                  className="w-full bg-background border border-border rounded-lg px-4 py-2 text-white focus:outline-none focus:border-accent"
+                  className="w-full bg-background border border-border rounded-lg px-4 py-2 text-text-main focus:outline-none focus:border-accent"
                 />
               </div>
             </div>
@@ -271,7 +271,7 @@ export const AdminChantierBuilder = () => {
                   value={prestationInput}
                   onChange={(e) => setPrestationInput(e.target.value)}
                   onKeyDown={(e) => { if(e.key === 'Enter') addPrestation(); }}
-                  className="flex-1 bg-background border border-border rounded-lg px-4 py-2 text-white focus:outline-none focus:border-accent"
+                  className="flex-1 bg-background border border-border rounded-lg px-4 py-2 text-text-main focus:outline-none focus:border-accent"
                   placeholder="Ex: Gros oeuvre, Plomberie..."
                 />
                 <Button onClick={addPrestation} variant="outline" type="button">Ajouter</Button>
@@ -293,9 +293,9 @@ export const AdminChantierBuilder = () => {
         {/* Colonne Latérale : Photos & Publication */}
         <div className="space-y-6">
           <div className="bg-surface border border-border rounded-xl p-6 space-y-4">
-            <h2 className="text-xl font-bold text-white border-b border-border pb-2">Visibilité</h2>
+            <h2 className="text-xl font-bold text-text-main border-b border-border pb-2">Visibilité</h2>
             <div className="flex items-center justify-between p-3 bg-background border border-border rounded-lg">
-              <span className="font-semibold text-white">Publier ce projet ?</span>
+              <span className="font-semibold text-text-main">Publier ce projet ?</span>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input type="checkbox" className="sr-only peer" checked={chantier.publie} onChange={(e) => setChantier({...chantier, publie: e.target.checked})} />
                 <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
@@ -305,7 +305,7 @@ export const AdminChantierBuilder = () => {
           </div>
 
           <div className="bg-surface border border-border rounded-xl p-6 space-y-4">
-            <h2 className="text-xl font-bold text-white border-b border-border pb-2 flex items-center justify-between">
+            <h2 className="text-xl font-bold text-text-main border-b border-border pb-2 flex items-center justify-between">
               Image Principale
               {uploading && <span className="text-xs text-accent animate-pulse">Upload...</span>}
             </h2>
@@ -332,7 +332,7 @@ export const AdminChantierBuilder = () => {
           </div>
 
           <div className="bg-surface border border-border rounded-xl p-6 space-y-4">
-            <h2 className="text-xl font-bold text-white border-b border-border pb-2 flex items-center justify-between">
+            <h2 className="text-xl font-bold text-text-main border-b border-border pb-2 flex items-center justify-between">
               Galerie Photos
               <label className="cursor-pointer text-xs flex items-center gap-1 bg-accent/20 text-accent px-2 py-1 rounded hover:bg-accent hover:text-primary transition-colors">
                 <Plus size={14} /> Ajouter

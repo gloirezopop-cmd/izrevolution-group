@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
-import { Shield, ShieldAlert, User, Search, RefreshCw } from 'lucide-react';
+import { Shield, ShieldAlert, User, Search, RefreshCw, Mail, Send } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useAuth } from '../contexts/AuthContext';
 
 export const AdminEquipe = () => {
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [updating, setUpdating] = useState<string | null>(null);
+  const [inviteEmail, setInviteEmail] = useState('');
+  const [inviting, setInviting] = useState(false);
+
+  const { user } = useAuth();
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -39,6 +44,37 @@ export const AdminEquipe = () => {
     setUpdating(null);
   };
 
+  const handleInvite = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inviteEmail || !user) return;
+    
+    setInviting(true);
+    try {
+      // Create invitation record
+      const { error } = await supabase.from('admin_invitations').insert({
+        email: inviteEmail.toLowerCase(),
+        invited_by: user.id
+      });
+      
+      if (error && error.code !== '23505') throw error; // Ignore if already invited
+      
+      // Open email client
+      const subject = encodeURIComponent("Invitation à administrer Révolution Group");
+      const body = encodeURIComponent(
+        `Bonjour,\n\nVous avez été invité à devenir Administrateur sur Révolution Group.\n\nVeuillez créer votre compte avec cette adresse email en cliquant sur le lien suivant :\nhttps://izrevolution-group.vercel.app/app\n\nVotre compte sera automatiquement promu Administrateur dès votre inscription.\n\nCordialement,\nL'équipe Révolution Group`
+      );
+      window.location.href = `mailto:${inviteEmail}?subject=${subject}&body=${body}`;
+      
+      toast.success("Invitation préparée ! Votre boîte mail va s'ouvrir.");
+      setInviteEmail('');
+    } catch (err: any) {
+      toast.error("Erreur lors de l'invitation.");
+      console.error(err);
+    } finally {
+      setInviting(false);
+    }
+  };
+
   const filteredUsers = users.filter(u => 
     (u.nom || '').toLowerCase().includes(search.toLowerCase()) || 
     (u.prenom || '').toLowerCase().includes(search.toLowerCase())
@@ -48,7 +84,7 @@ export const AdminEquipe = () => {
     <div className="max-w-6xl mx-auto py-8">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2">Gestion de l'Équipe</h1>
+          <h1 className="text-3xl font-bold text-white mb-2">Gestion de l'équipe</h1>
           <p className="text-text-muted">Gérez les administrateurs et les accès de vos collaborateurs.</p>
         </div>
         <div className="relative">
@@ -58,8 +94,42 @@ export const AdminEquipe = () => {
             placeholder="Rechercher un utilisateur..." 
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full md:w-64 pl-10 pr-4 py-2 bg-surface border border-border rounded-xl text-white focus:outline-none focus:border-accent"
+            className="w-full md:w-64 pl-10 pr-4 py-2 bg-surface border border-border rounded-xl text-text-main focus:outline-none focus:border-accent"
           />
+        </div>
+      </div>
+
+      <div className="bg-surface border border-border rounded-xl p-6 mb-8">
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center text-accent shrink-0">
+            <Mail size={24} />
+          </div>
+          <div className="flex-1">
+            <h2 className="text-lg font-bold text-white mb-1">Inviter un nouvel Administrateur</h2>
+            <p className="text-sm text-text-muted mb-4">
+              Envoyez une invitation par email. Dès que la personne créera son compte avec cette adresse, elle deviendra automatiquement administrateur.
+            </p>
+            <form onSubmit={handleInvite} className="flex flex-col sm:flex-row gap-3">
+              <div className="flex-1">
+                <input 
+                  type="email" 
+                  required
+                  placeholder="Adresse email du collaborateur..."
+                  value={inviteEmail}
+                  onChange={(e) => setInviteEmail(e.target.value)}
+                  className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-text-main focus:outline-none focus:border-accent"
+                />
+              </div>
+              <button 
+                type="submit"
+                disabled={inviting || !inviteEmail}
+                className="bg-accent text-primary font-bold py-2.5 px-6 rounded-lg hover:bg-accent-light transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {inviting ? <RefreshCw size={18} className="animate-spin" /> : <Send size={18} />}
+                Envoyer l'invitation
+              </button>
+            </form>
+          </div>
         </div>
       </div>
 
@@ -121,7 +191,7 @@ export const AdminEquipe = () => {
                         disabled={updating === user.id}
                         value={user.role || 'client'}
                         onChange={(e) => changeRole(user.id, e.target.value)}
-                        className="bg-background border border-border rounded-lg px-3 py-1.5 text-white text-xs focus:outline-none focus:border-accent disabled:opacity-50"
+                        className="bg-background border border-border rounded-lg px-3 py-1.5 text-text-main text-xs focus:outline-none focus:border-accent disabled:opacity-50"
                       >
                         <option value="client">Rendre Client</option>
                         <option value="equipe">Nommer Équipe</option>
