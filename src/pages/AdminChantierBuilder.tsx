@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { Button } from '../components/ui/Button';
 import { ArrowLeft, Save, Upload, Trash2, Image as ImageIcon, GripVertical, Plus } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 export const AdminChantierBuilder = () => {
   const { id } = useParams();
@@ -99,7 +100,7 @@ export const AdminChantierBuilder = () => {
       }
     } catch (error) {
       console.error('Erreur upload:', error);
-      alert('Erreur lors de l\'upload de l\'image.');
+      toast.error('Erreur lors de l\'upload de l\'image.');
     } finally {
       setUploading(false);
     }

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { Button } from '../components/ui/Button';
 import { ArrowLeft, Save, Plus, Trash2, GripVertical, Video, FileText } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 export const AdminFormationBuilder = () => {
   const { id } = useParams();
@@ -72,7 +73,7 @@ export const AdminFormationBuilder = () => {
 
   const addModule = async () => {
     if (isNew) {
-      alert("Enregistrez d'abord la formation avant d'ajouter des modules.");
+      toast.error("Enregistrez d'abord la formation avant d'ajouter des modules.");
       return;
     }
     const newOrdre = modules.length > 0 ? Math.max(...modules.map(m => m.ordre)) + 1 : 1;
@@ -170,7 +171,7 @@ export const AdminFormationBuilder = () => {
       await supabase.from('lecons').update({ url_contenu: newUrl }).eq('id', leconId);
     } catch (error) {
       console.error('Erreur upload leçon:', error);
-      alert('Erreur lors de l\'upload du fichier.');
+      toast.error('Erreur lors de l\'upload du fichier.');
     } finally {
       setUploadingLecon(null);
     }
@@ -192,7 +193,7 @@ export const AdminFormationBuilder = () => {
       setFormation({ ...formation, image: data.publicUrl });
     } catch (error) {
       console.error('Erreur upload image:', error);
-      alert('Erreur lors de l\'upload de l\'image.');
+      toast.error('Erreur lors de l\'upload de l\'image.');
     } finally {
       setUploadingImage(false);
     }

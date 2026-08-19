@@ -4,6 +4,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { Button } from '../components/ui/Button';
 import { User, Mail, Shield, Bell, Moon, LogOut, Edit2, Save, X } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import toast from 'react-hot-toast';
 
 export const Parametres = () => {
   const { user, profile, isAdmin, updateProfile } = useAuth();
@@ -40,10 +41,11 @@ export const Parametres = () => {
         prenom: editForm.prenom,
         telephone: editForm.telephone
       });
+      toast.success('Profil mis à jour avec succès.');
       setIsEditing(false);
     } catch (error) {
       console.error('Erreur lors de la mise à jour du profil:', error);
-      alert('Une erreur est survenue lors de la sauvegarde.');
+      toast.error('Une erreur est survenue lors de la sauvegarde.');
     } finally {
       setIsSaving(false);
     }

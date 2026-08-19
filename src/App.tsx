@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import { AppLayout } from './layouts/AppLayout';
 import { Dashboard } from './pages/Dashboard';
 import { Chantiers } from './pages/Chantiers';
@@ -19,6 +20,7 @@ import { AdminChantierBuilder } from './pages/AdminChantierBuilder';
 import { AdminEquipe } from './pages/AdminEquipe';
 import { Parametres } from './pages/Parametres';
 import { WhatsAppFloat } from './components/ui/WhatsAppFloat';
+import { ScrollToTop } from './components/ui/ScrollToTop';
 
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -28,6 +30,14 @@ function App() {
     <ThemeProvider>
       <AuthProvider>
         <Router>
+          <Toaster 
+            position="top-center" 
+            toastOptions={{ 
+              duration: 4000, 
+              style: { background: '#1E293B', color: '#fff', borderRadius: '10px', border: '1px solid #334155' },
+              success: { iconTheme: { primary: '#FACC15', secondary: '#1E293B' } }
+            }} 
+          />
           <Routes>
             {/* Routes Publiques */}
             <Route path="/" element={<PublicLayout><Home /></PublicLayout>} />
@@ -56,6 +66,7 @@ function App() {
             <Route path="/app/admin/equipe" element={<AppLayout><AdminEquipe /></AppLayout>} />
           </Routes>
           <WhatsAppFloat />
+          <ScrollToTop />
       </Router>
       </AuthProvider>
     </ThemeProvider>

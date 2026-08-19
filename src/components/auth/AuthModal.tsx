@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Mail, Lock, User as UserIcon, Eye, EyeOff } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { Button } from '../ui/Button';
+import toast from 'react-hot-toast';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -49,7 +50,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
           onClose();
         } else {
           onClose();
-          alert("Inscription réussie ! Veuillez vérifier vos emails pour confirmer votre compte, puis connectez-vous pour finaliser votre accès à la formation.");
+          toast.success("Inscription réussie ! Veuillez vérifier vos emails pour confirmer votre compte, puis connectez-vous pour finaliser votre accès à la formation.", { duration: 6000 });
         }
       }
     } catch (err: any) {

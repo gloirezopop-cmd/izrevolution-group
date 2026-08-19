@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { Shield, ShieldAlert, User, Search, RefreshCw } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 export const AdminEquipe = () => {
   const [users, setUsers] = useState<any[]>([]);
@@ -33,7 +34,7 @@ export const AdminEquipe = () => {
     if (!error) {
       setUsers(users.map(u => u.id === userId ? { ...u, role: newRole } : u));
     } else {
-      alert("Erreur lors de la modification du rôle.");
+      toast.error("Erreur lors de la modification du rôle.");
     }
     setUpdating(null);
   };
