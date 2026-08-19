@@ -4,6 +4,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { formationsService, inscriptionsService } from '../services/api';
 import type { Formation, Lecon } from '../types';
 import { ArrowLeft, PlayCircle, FileText, CheckCircle, ChevronDown, ChevronRight, Lock } from 'lucide-react';
+import { supabase } from '../lib/supabase';
+import { useAuth } from '../contexts/AuthContext';
 
 export const FormationViewer = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -18,21 +20,45 @@ export const FormationViewer = () => {
   const [progressions, setProgressions] = useState<any[]>([]);
   const [savingProgress, setSavingProgress] = useState(false);
 
+  const { isAdmin } = useAuth();
+
   useEffect(() => {
-    formationsService.getFormations().then(formations => {
+    const fetchFormationData = async () => {
+      const formations = await formationsService.getFormations();
       const found = formations.find(f => f.slug === slug);
+      
       if (found) {
-        setFormation(found);
+        // Fetch modules and lecons for this formation
+        const { data: mData } = await supabase
+          .from('modules')
+          .select('*, lecons(*)')
+          .eq('formation_id', found.id)
+          .order('ordre', { ascending: true });
+        
+        let formationWithModules = { ...found };
+        
+        if (mData) {
+          formationWithModules.modules = mData.map(m => ({
+            ...m,
+            lecons: m.lecons ? m.lecons.sort((a: any, b: any) => a.ordre - b.ordre) : []
+          }));
+        }
+
+        setFormation(formationWithModules);
+
         // Ouvrir le premier module par défaut et sélectionner la première leçon
-        if (found.modules && found.modules.length > 0) {
-          setExpandedModules([found.modules[0].id]);
-          if (found.modules[0].lecons && found.modules[0].lecons.length > 0) {
-            setActiveLecon(found.modules[0].lecons[0]);
+        if (formationWithModules.modules && formationWithModules.modules.length > 0) {
+          setExpandedModules([formationWithModules.modules[0].id]);
+          
+          const firstModuleWithLessons = formationWithModules.modules.find((m: any) => m.lecons && m.lecons.length > 0);
+          if (firstModuleWithLessons) {
+            setActiveLecon(firstModuleWithLessons.lecons[0]);
           }
         }
       }
-    });
+    };
 
+    fetchFormationData();
     inscriptionsService.getProgression().then(setProgressions);
   }, [slug]);
 
@@ -175,7 +201,7 @@ export const FormationViewer = () => {
           </div>
           
           <div className="flex-1 overflow-y-auto">
-            {formation.modules && formation.modules.length > 0 ? (
+            {formation.modules && formation.modules.some(m => m.lecons && m.lecons.length > 0) ? (
               [...formation.modules].sort((a, b) => a.ordre - b.ordre).map(module => (
                 <div key={module.id} className="border-b border-border last:border-0">
                   {/* Entête du module */}
@@ -197,7 +223,7 @@ export const FormationViewer = () => {
                   {/* Leçons du module */}
                   {expandedModules.includes(module.id) && (
                     <div className="flex flex-col py-2">
-                      {module.lecons.map((lecon, idx) => {
+                      {module.lecons.map((lecon: any, idx: number) => {
                         const isActive = activeLecon?.id === lecon.id;
                         return (
                           <button
@@ -232,24 +258,34 @@ export const FormationViewer = () => {
               ))
             ) : (
               <div className="p-8 text-center text-text-muted text-sm flex flex-col items-center justify-center h-full">
-                <Lock size={48} className="text-accent mb-4 opacity-50" />
-                <h3 className="text-xl font-bold text-white mb-2">Contenu verrouillé</h3>
-                <p className="mb-8 max-w-xs">Vous devez procéder au paiement pour débloquer l'accès à cette formation.</p>
-                
-                {formation.lien_paiement ? (
-                  <button 
-                    onClick={() => window.open(formation.lien_paiement, '_blank')}
-                    className="px-6 py-3 bg-accent text-primary font-bold rounded-xl hover:scale-105 transition-transform flex items-center gap-2 shadow-lg"
-                  >
-                    <Lock size={18} /> Payer et Débloquer
-                  </button>
+                {isAdmin ? (
+                  <>
+                    <Lock size={48} className="text-text-muted mb-4 opacity-50" />
+                    <h3 className="text-xl font-bold text-white mb-2">Formation vide</h3>
+                    <p className="mb-8 max-w-xs">Vous n'avez pas encore ajouté de leçons à cette formation.</p>
+                  </>
                 ) : (
-                  <button 
-                    onClick={() => window.open(`https://wa.me/237670865004?text=Bonjour, j'aimerais payer pour débloquer la formation : ${formation.titre}`, '_blank')}
-                    className="px-6 py-3 bg-green-500 text-white font-bold rounded-xl hover:scale-105 transition-transform flex items-center gap-2 shadow-lg"
-                  >
-                    Payer via WhatsApp
-                  </button>
+                  <>
+                    <Lock size={48} className="text-accent mb-4 opacity-50" />
+                    <h3 className="text-xl font-bold text-white mb-2">Contenu verrouillé</h3>
+                    <p className="mb-8 max-w-xs">Vous devez procéder au paiement pour débloquer l'accès à cette formation.</p>
+                    
+                    {formation.lien_paiement ? (
+                      <button 
+                        onClick={() => window.open(formation.lien_paiement, '_blank')}
+                        className="px-6 py-3 bg-accent text-primary font-bold rounded-xl hover:scale-105 transition-transform flex items-center gap-2 shadow-lg"
+                      >
+                        <Lock size={18} /> Payer et Débloquer
+                      </button>
+                    ) : (
+                      <button 
+                        onClick={() => window.open(`https://wa.me/237670865004?text=Bonjour, j'aimerais payer pour débloquer la formation : ${formation.titre}`, '_blank')}
+                        className="px-6 py-3 bg-green-500 text-white font-bold rounded-xl hover:scale-105 transition-transform flex items-center gap-2 shadow-lg"
+                      >
+                        Payer via WhatsApp
+                      </button>
+                    )}
+                  </>
                 )}
               </div>
             )}
