@@ -75,8 +75,8 @@ function App() {
           <WhatsAppFloat />
           <ScrollToTop />
       </Router>
-      </AuthProvider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
 
