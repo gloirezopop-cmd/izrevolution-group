@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import type { ReactNode } from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
-import { Menu, X, ChevronRight, Phone, Mail, MapPin } from 'lucide-react';
+import { Menu, X, ChevronRight, Phone, Mail, MapPin, User as UserIcon } from 'lucide-react';
 import { Button } from '../components/ui/Button';
+import { useAuth } from '../contexts/AuthContext';
 
 export const PublicLayout = ({ children }: { children: ReactNode }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   return (
     <div className="min-h-screen flex flex-col bg-background font-sans">
@@ -26,9 +28,16 @@ export const PublicLayout = ({ children }: { children: ReactNode }) => {
               <NavLink to="/" end className={({ isActive }) => `text-sm font-medium transition-colors hover:text-accent ${isActive ? 'text-accent' : 'text-text-main'}`}>Accueil</NavLink>
               <NavLink to="/chantiers" className={({ isActive }) => `text-sm font-medium transition-colors hover:text-accent ${isActive ? 'text-accent' : 'text-text-main'}`}>Réalisations</NavLink>
               <NavLink to="/formations" className={({ isActive }) => `text-sm font-medium transition-colors hover:text-accent ${isActive ? 'text-accent' : 'text-text-main'}`}>Masterclass</NavLink>
-              <Button onClick={() => navigate('/devis')} variant="primary" className="ml-4">
-                Demander un Devis
-              </Button>
+              
+              {user ? (
+                <Button onClick={() => navigate('/app')} variant="outline" className="ml-4 flex items-center gap-2">
+                  <UserIcon size={18} /> Mon Espace
+                </Button>
+              ) : (
+                <Button onClick={() => navigate('/devis')} variant="primary" className="ml-4">
+                  Demander un Devis
+                </Button>
+              )}
             </nav>
 
             {/* Mobile Menu Button */}
@@ -48,9 +57,16 @@ export const PublicLayout = ({ children }: { children: ReactNode }) => {
               <NavLink to="/" end onClick={() => setIsMobileMenuOpen(false)} className={({ isActive }) => `block px-4 py-3 rounded-xl text-base font-medium ${isActive ? 'bg-primary/5 text-accent' : 'text-text-main hover:bg-primary/5'}`}>Accueil</NavLink>
               <NavLink to="/chantiers" onClick={() => setIsMobileMenuOpen(false)} className={({ isActive }) => `block px-4 py-3 rounded-xl text-base font-medium ${isActive ? 'bg-primary/5 text-accent' : 'text-text-main hover:bg-primary/5'}`}>Réalisations</NavLink>
               <NavLink to="/formations" onClick={() => setIsMobileMenuOpen(false)} className={({ isActive }) => `block px-4 py-3 rounded-xl text-base font-medium ${isActive ? 'bg-primary/5 text-accent' : 'text-text-main hover:bg-primary/5'}`}>Masterclass</NavLink>
-              <Button onClick={() => { setIsMobileMenuOpen(false); navigate('/devis'); }} variant="primary" className="w-full mt-4">
-                Demander un Devis
-              </Button>
+              
+              {user ? (
+                <Button onClick={() => { setIsMobileMenuOpen(false); navigate('/app'); }} variant="outline" className="w-full mt-4 flex justify-center items-center gap-2">
+                  <UserIcon size={18} /> Mon Espace
+                </Button>
+              ) : (
+                <Button onClick={() => { setIsMobileMenuOpen(false); navigate('/devis'); }} variant="primary" className="w-full mt-4">
+                  Demander un Devis
+                </Button>
+              )}
             </div>
           </div>
         )}

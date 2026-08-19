@@ -38,15 +38,26 @@ export const Formations = () => {
     }
 
     const res = await inscriptionsService.sInscrire(formation.id);
-    setStatusMessage({ type: res.success ? 'success' : 'error', text: res.message });
-    setTimeout(() => setStatusMessage(null), 5000);
+    if (res.success) {
+      navigate(`/app/formations/${formation.slug}`);
+    } else {
+      setStatusMessage({ type: 'error', text: res.message });
+      setTimeout(() => setStatusMessage(null), 5000);
+    }
   };
 
   const handleAuthSuccess = async () => {
     if (selectedFormationId) {
       const res = await inscriptionsService.sInscrire(selectedFormationId);
-      setStatusMessage({ type: res.success ? 'success' : 'error', text: res.message });
-      setTimeout(() => setStatusMessage(null), 5000);
+      if (res.success) {
+        const formation = formations.find(f => f.id === selectedFormationId);
+        if (formation) navigate(`/app/formations/${formation.slug}`);
+      } else {
+        setStatusMessage({ type: 'error', text: res.message });
+        setTimeout(() => setStatusMessage(null), 5000);
+      }
+    } else {
+      navigate('/app');
     }
   };
 
