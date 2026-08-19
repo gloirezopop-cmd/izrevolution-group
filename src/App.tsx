@@ -19,20 +19,24 @@ import { MesFormations } from './pages/MesFormations';
 import { AdminChantiers } from './pages/AdminChantiers';
 import { AdminChantierBuilder } from './pages/AdminChantierBuilder';
 import { AdminEquipe } from './pages/AdminEquipe';
+import { AdminDashboard } from './pages/AdminDashboard';
 import { Parametres } from './pages/Parametres';
 import { WhatsAppFloat } from './components/ui/WhatsAppFloat';
 import { ScrollToTop } from './components/ui/ScrollToTop';
+import { AnalyticsTracker } from './components/AnalyticsTracker';
 
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 
 function App() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
+    <AuthProvider>
+      <ThemeProvider>
         <Router>
+          <ScrollToTop />
+          <AnalyticsTracker />
           <Toaster 
-            position="top-center" 
+            position="top-right" 
             toastOptions={{ 
               duration: 4000, 
               style: { background: '#1E293B', color: '#fff', borderRadius: '10px', border: '1px solid #334155' },
@@ -61,6 +65,7 @@ function App() {
             <Route path="/app/parametres" element={<AppLayout><Parametres /></AppLayout>} />
 
             {/* Routes Admin */}
+            <Route path="/app/admin" element={<AppLayout><AdminDashboard /></AppLayout>} />
             <Route path="/app/admin/formations" element={<AppLayout><AdminFormations /></AppLayout>} />
             <Route path="/app/admin/formations/:id" element={<AppLayout><AdminFormationBuilder /></AppLayout>} />
             <Route path="/app/admin/chantiers" element={<AppLayout><AdminChantiers /></AppLayout>} />

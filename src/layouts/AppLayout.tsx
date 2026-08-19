@@ -1,7 +1,7 @@
 import React from 'react';
 import type { ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, FolderOpen, FileText, GraduationCap, Users, Settings, User, Menu, ShieldAlert } from 'lucide-react';
+import { Home, FolderOpen, FileText, GraduationCap, Users, Settings, User, Menu, ShieldAlert, Activity } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 export const AppLayout = ({ children }: { children: ReactNode }) => {
@@ -41,6 +41,7 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
               <div className="text-xs font-bold text-text-muted uppercase tracking-wider mb-2 px-4 flex items-center gap-2">
                 <ShieldAlert size={14} /> Espace Admin
               </div>
+              <NavItem icon={Activity} label="Analytics" to="/app/admin" onClick={() => setIsMobileMenuOpen(false)} />
               <NavItem icon={FolderOpen} label="Gérer Chantiers" to="/app/admin/chantiers" onClick={() => setIsMobileMenuOpen(false)} />
               <NavItem icon={GraduationCap} label="Gérer Formations" to="/app/admin/formations" onClick={() => setIsMobileMenuOpen(false)} />
               <NavItem icon={Users} label="Gestion Équipe" to="/app/admin/equipe" onClick={() => setIsMobileMenuOpen(false)} />
