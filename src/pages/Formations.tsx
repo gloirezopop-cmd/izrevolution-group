@@ -149,18 +149,35 @@ export const Formations = () => {
                 </div>
               )}
 
+              {/* Urgence */}
+              {f.message_urgence && (
+                <div className="text-xs font-bold text-red-500 bg-red-500/10 px-3 py-2 rounded-lg mb-4 flex items-center gap-2 animate-pulse">
+                  <Clock size={14} />
+                  {f.message_urgence}
+                </div>
+              )}
+
               {/* Action / Prix */}
               <div className="flex items-center justify-between mt-auto pt-4">
                 <span className="font-mono font-bold text-lg text-primary">{formatCFA(f.prix_fcfa)}</span>
                 <Button 
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleInscription(f);
+                    if (f.lien_paiement && !user) {
+                      // S'il y a un lien de paiement direct, on s'assure d'abord qu'il a un compte
+                      setSelectedFormationId(f.id);
+                      setIsAuthModalOpen(true);
+                    } else if (f.lien_paiement && user) {
+                      // S'il est co, on l'inscrit puis on le redirige vers le paiement ou son dashboard
+                      handleInscription(f);
+                    } else {
+                      handleInscription(f);
+                    }
                   }} 
                   variant="primary" 
                   className="flex items-center gap-2 text-sm px-4 py-2"
                 >
-                  <Lock size={16} /> S'inscrire
+                  <Lock size={16} /> {f.lien_paiement ? 'Acheter' : "S'inscrire"}
                 </Button>
               </div>
             </div>

@@ -84,6 +84,8 @@ export interface Formation {
   est_public: boolean;
   formateur?: string;
   image_couverture?: string;
+  lien_paiement?: string;
+  message_urgence?: string;
   modules?: ModuleFormation[];
 }
 

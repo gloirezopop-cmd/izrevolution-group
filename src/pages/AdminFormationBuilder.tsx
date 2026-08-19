@@ -23,7 +23,9 @@ export const AdminFormationBuilder = () => {
     mode: 'mixte',
     statut: 'brouillon',
     niveau: 'debutant',
-    image: ''
+    image: '',
+    lien_paiement: '',
+    message_urgence: ''
   });
 
   const [modules, setModules] = useState<any[]>([]);
@@ -281,6 +283,29 @@ export const AdminFormationBuilder = () => {
               <option value="intermediaire">Intermédiaire</option>
               <option value="avance">Avancé</option>
             </select>
+          </div>
+          
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-text-muted uppercase tracking-wider">Lien de paiement (ex: Stripe, Campay)</label>
+            <input 
+              type="url" 
+              value={formation.lien_paiement || ''}
+              onChange={(e) => setFormation({...formation, lien_paiement: e.target.value})}
+              className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-accent"
+              placeholder="https://pay.stripe.com/..."
+            />
+            <p className="text-xs text-text-muted mt-1">Laissez vide pour utiliser le bouton WhatsApp standard.</p>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-text-muted uppercase tracking-wider">Message d'urgence (Promotion)</label>
+            <input 
+              type="text" 
+              value={formation.message_urgence || ''}
+              onChange={(e) => setFormation({...formation, message_urgence: e.target.value})}
+              className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-accent"
+              placeholder="Ex: Plus que 3 places disponibles !"
+            />
           </div>
         </div>
 

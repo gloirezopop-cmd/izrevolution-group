@@ -231,9 +231,26 @@ export const FormationViewer = () => {
                 </div>
               ))
             ) : (
-              <div className="p-6 text-center text-text-muted text-sm">
-                <Lock size={32} className="mx-auto mb-3 opacity-20" />
-                <p>Le contenu de cette formation n'est pas encore disponible ou nécessite une inscription.</p>
+              <div className="p-8 text-center text-text-muted text-sm flex flex-col items-center justify-center h-full">
+                <Lock size={48} className="text-accent mb-4 opacity-50" />
+                <h3 className="text-xl font-bold text-white mb-2">Contenu verrouillé</h3>
+                <p className="mb-8 max-w-xs">Vous devez procéder au paiement pour débloquer l'accès à cette formation.</p>
+                
+                {formation.lien_paiement ? (
+                  <button 
+                    onClick={() => window.open(formation.lien_paiement, '_blank')}
+                    className="px-6 py-3 bg-accent text-primary font-bold rounded-xl hover:scale-105 transition-transform flex items-center gap-2 shadow-lg"
+                  >
+                    <Lock size={18} /> Payer et Débloquer
+                  </button>
+                ) : (
+                  <button 
+                    onClick={() => window.open(`https://wa.me/237670865004?text=Bonjour, j'aimerais payer pour débloquer la formation : ${formation.titre}`, '_blank')}
+                    className="px-6 py-3 bg-green-500 text-white font-bold rounded-xl hover:scale-105 transition-transform flex items-center gap-2 shadow-lg"
+                  >
+                    Payer via WhatsApp
+                  </button>
+                )}
               </div>
             )}
           </div>
