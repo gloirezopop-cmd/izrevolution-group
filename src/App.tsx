@@ -12,6 +12,7 @@ import { FormationViewer } from './pages/FormationViewer';
 import { Perspectives } from './pages/Perspectives';
 import { Home } from './pages/Home';
 import { PublicLayout } from './layouts/PublicLayout';
+import { ResetPassword } from './pages/ResetPassword';
 import { AdminFormations } from './pages/AdminFormations';
 import { AdminFormationBuilder } from './pages/AdminFormationBuilder';
 import { MesFormations } from './pages/MesFormations';
@@ -46,6 +47,7 @@ function App() {
             <Route path="/formations" element={<PublicLayout><Formations /></PublicLayout>} />
             <Route path="/formations/:slug" element={<PublicLayout><FormationViewer /></PublicLayout>} />
             <Route path="/devis" element={<PublicLayout><Devis /></PublicLayout>} />
+            <Route path="/reset-password" element={<ResetPassword />} />
 
             {/* Routes Privées / Dashboard */}
             <Route path="/app" element={<AppLayout><Dashboard /></AppLayout>} />

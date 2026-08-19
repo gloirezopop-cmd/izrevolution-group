@@ -28,6 +28,20 @@ export const Parametres = () => {
     }
   }, [profile]);
 
+  const handleResetPassword = async () => {
+    if (!user?.email) return;
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(user.email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      if (error) throw error;
+      toast.success("Lien de réinitialisation envoyé à votre adresse email.");
+    } catch (error: any) {
+      console.error(error);
+      toast.error("Erreur lors de l'envoi du lien de réinitialisation.");
+    }
+  };
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
     window.location.href = '/';
@@ -215,7 +229,7 @@ export const Parametres = () => {
             <p className="text-sm text-text-muted mb-4">
               Pour des raisons de sécurité, les changements de mot de passe se font uniquement par email de récupération.
             </p>
-            <Button variant="outline" className="w-full text-sm">
+            <Button variant="outline" className="w-full text-sm" onClick={handleResetPassword}>
               Réinitialiser le mot de passe
             </Button>
           </div>

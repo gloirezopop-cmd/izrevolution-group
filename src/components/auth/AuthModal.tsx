@@ -22,6 +22,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,7 +30,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
     setError(null);
 
     try {
-      if (isLogin) {
+      if (isForgotPassword) {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/reset-password`,
+        });
+        if (error) throw error;
+        toast.success("Si cet email existe, un lien de réinitialisation y a été envoyé.");
+        setIsForgotPassword(false);
+      } else if (isLogin) {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         onSuccess();
@@ -84,10 +92,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
             <div className="p-8">
               <div className="text-center mb-8">
                 <h2 className="text-2xl font-bold text-primary mb-2">
-                  {isLogin ? 'Bon retour !' : 'Créer un compte'}
+                  {isForgotPassword ? 'Mot de passe oublié ?' : isLogin ? 'Bon retour !' : 'Créer un compte'}
                 </h2>
                 <p className="text-text-muted text-sm">
-                  {isLogin 
+                  {isForgotPassword 
+                    ? 'Entrez votre email pour recevoir un lien de réinitialisation.'
+                    : isLogin 
                     ? 'Connectez-vous pour accéder à vos formations.' 
                     : 'Rejoignez RÉVOLUTION GROUP pour suivre nos formations.'}
                 </p>
@@ -100,7 +110,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                   </div>
                 )}
 
-                {!isLogin && (
+                {!isLogin && !isForgotPassword && (
                   <>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-1">
@@ -181,30 +191,44 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                   </div>
                 </div>
 
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold text-text-muted uppercase tracking-wider">Mot de passe</label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Lock size={16} className="text-text-muted" />
+                {!isForgotPassword && (
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-text-muted uppercase tracking-wider">Mot de passe</label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <Lock size={16} className="text-text-muted" />
+                      </div>
+                      <input 
+                        type={showPassword ? "text" : "password"}
+                        required
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="w-full relative z-10 bg-background border border-border rounded-lg pl-10 pr-10 py-2.5 text-text-main focus:outline-none focus:border-accent transition-colors"
+                        placeholder="********"
+                        autoComplete="new-password"
+                      />
+                      <button 
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center z-20 text-text-muted hover:text-primary transition-colors"
+                      >
+                        {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                      </button>
                     </div>
-                    <input 
-                      type={showPassword ? "text" : "password"}
-                      required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="w-full relative z-10 bg-background border border-border rounded-lg pl-10 pr-10 py-2.5 text-text-main focus:outline-none focus:border-accent transition-colors"
-                      placeholder="********"
-                      autoComplete="new-password"
-                    />
+                  </div>
+                )}
+
+                {isLogin && !isForgotPassword && (
+                  <div className="flex justify-end">
                     <button 
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute inset-y-0 right-0 pr-3 flex items-center z-20 text-text-muted hover:text-primary transition-colors"
+                      type="button" 
+                      onClick={() => { setIsForgotPassword(true); setError(null); }}
+                      className="text-sm text-accent hover:underline font-medium"
                     >
-                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                      Mot de passe oublié ?
                     </button>
                   </div>
-                </div>
+                )}
 
                 <Button 
                   type="submit" 
@@ -212,19 +236,31 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                   className="w-full py-3 mt-4 relative z-10"
                   disabled={loading}
                 >
-                  {loading ? 'Chargement...' : (isLogin ? 'Se connecter' : 'Créer mon compte')}
+                  {loading ? 'Chargement...' : (isForgotPassword ? 'Envoyer le lien' : isLogin ? 'Se connecter' : 'Créer mon compte')}
                 </Button>
               </form>
 
               <div className="mt-6 text-center text-sm text-text-muted">
-                {isLogin ? "Vous n'avez pas de compte ? " : "Vous avez déjà un compte ? "}
-                <button 
-                  type="button"
-                  onClick={(e) => { e.preventDefault(); setIsLogin(!isLogin); setError(null); }}
-                  className="text-accent hover:underline font-semibold relative z-10"
-                >
-                  {isLogin ? "S'inscrire" : "Se connecter"}
-                </button>
+                {isForgotPassword ? (
+                  <button 
+                    type="button"
+                    onClick={(e) => { e.preventDefault(); setIsForgotPassword(false); setError(null); }}
+                    className="text-accent hover:underline font-semibold relative z-10"
+                  >
+                    Retour à la connexion
+                  </button>
+                ) : (
+                  <>
+                    {isLogin ? "Vous n'avez pas de compte ? " : "Vous avez déjà un compte ? "}
+                    <button 
+                      type="button"
+                      onClick={(e) => { e.preventDefault(); setIsLogin(!isLogin); setIsForgotPassword(false); setError(null); }}
+                      className="text-accent hover:underline font-semibold relative z-10"
+                    >
+                      {isLogin ? "S'inscrire" : "Se connecter"}
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </motion.div>
