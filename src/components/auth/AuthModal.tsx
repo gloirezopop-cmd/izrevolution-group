@@ -11,6 +11,15 @@ interface AuthModalProps {
   onSuccess: () => void;
 }
 
+const translateAuthError = (message: string) => {
+  const msg = message.toLowerCase();
+  if (msg.includes('invalid login credentials')) return 'Email ou mot de passe incorrect.';
+  if (msg.includes('user already registered')) return 'Un compte existe déjà avec cet email.';
+  if (msg.includes('password should be at least')) return 'Le mot de passe doit contenir au moins 6 caractères.';
+  if (msg.includes('email not confirmed')) return 'Veuillez confirmer votre adresse email avant de vous connecter.';
+  return message;
+};
+
 export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
@@ -62,7 +71,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
         }
       }
     } catch (err: any) {
-      setError(err.message || 'Une erreur est survenue.');
+      setError(translateAuthError(err.message || 'Une erreur est survenue.'));
     } finally {
       setLoading(false);
     }
