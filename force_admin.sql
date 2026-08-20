@@ -1,4 +1,4 @@
--- 1. On s'assure que TOUS les utilisateurs existants ont un profil et qu'il est défini sur "admin"
+-- 1. Forcer tous les utilisateurs existants à devenir Administrateur
 INSERT INTO public.profiles (id, nom, role)
 SELECT id, email, 'admin'
 FROM auth.users

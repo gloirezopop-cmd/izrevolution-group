@@ -16,70 +16,25 @@ CREATE POLICY "Modules visibles par tous" ON public.modules
 FOR SELECT USING (true);
 
 CREATE POLICY "Modifications modules par admins" ON public.modules 
-FOR ALL USING (
-    EXISTS (
-        SELECT 1 FROM public.profiles
-        WHERE profiles.id = auth.uid() AND profiles.role = 'admin'
-    )
-) WITH CHECK (
-    EXISTS (
-        SELECT 1 FROM public.profiles
-        WHERE profiles.id = auth.uid() AND profiles.role = 'admin'
-    )
-);
+FOR ALL USING (public.est_admin()) WITH CHECK (public.est_admin());
 
 -- 3. CREATE POLICIES FOR 'lecons'
 CREATE POLICY "Leçons visibles par tous" ON public.lecons 
 FOR SELECT USING (true);
 
 CREATE POLICY "Modifications lecons par admins" ON public.lecons 
-FOR ALL USING (
-    EXISTS (
-        SELECT 1 FROM public.profiles
-        WHERE profiles.id = auth.uid() AND profiles.role = 'admin'
-    )
-) WITH CHECK (
-    EXISTS (
-        SELECT 1 FROM public.profiles
-        WHERE profiles.id = auth.uid() AND profiles.role = 'admin'
-    )
-);
+FOR ALL USING (public.est_admin()) WITH CHECK (public.est_admin());
 
 -- 4. CREATE POLICIES FOR 'documents'
 CREATE POLICY "Documents chantiers visibles par admins" ON public.documents 
-FOR SELECT USING (
-    EXISTS (
-        SELECT 1 FROM public.profiles
-        WHERE profiles.id = auth.uid() AND profiles.role = 'admin'
-    )
-);
+FOR SELECT USING (public.est_admin());
 
 CREATE POLICY "Modifications documents par admins" ON public.documents 
-FOR ALL USING (
-    EXISTS (
-        SELECT 1 FROM public.profiles
-        WHERE profiles.id = auth.uid() AND profiles.role = 'admin'
-    )
-) WITH CHECK (
-    EXISTS (
-        SELECT 1 FROM public.profiles
-        WHERE profiles.id = auth.uid() AND profiles.role = 'admin'
-    )
-);
+FOR ALL USING (public.est_admin()) WITH CHECK (public.est_admin());
 
 -- 5. CREATE POLICIES FOR 'parametres_entreprise'
 CREATE POLICY "Paramètres visibles par tous" ON public.parametres_entreprise 
 FOR SELECT USING (true);
 
 CREATE POLICY "Modifications parametres par admins" ON public.parametres_entreprise 
-FOR ALL USING (
-    EXISTS (
-        SELECT 1 FROM public.profiles
-        WHERE profiles.id = auth.uid() AND profiles.role = 'admin'
-    )
-) WITH CHECK (
-    EXISTS (
-        SELECT 1 FROM public.profiles
-        WHERE profiles.id = auth.uid() AND profiles.role = 'admin'
-    )
-);
+FOR ALL USING (public.est_admin()) WITH CHECK (public.est_admin());
